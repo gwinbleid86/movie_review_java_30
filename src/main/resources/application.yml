@@ -8,6 +8,29 @@ spring:
     password: qwerty
     driver-class-name: org.h2.Driver
 
-  sql:
-    init:
-      mode: always
+  liquibase:
+    change-log: classpath:/db/changelog/master.yaml
+
+#  output:
+#    ansi:
+#      enabled: ALWAYS                   # цветной вывод в консоль
+
+#  sql:
+#    init:
+#      mode: always
+
+#logging:
+#  level:
+#    root: INFO                          # уровень по умолчанию для всего
+#    kg.attractor.movie_review: DEBUG    # ваш пакет — подробные логи
+
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n"
+
+#  file:
+#    name: logs/myapp.log                # запись в файл
+
+#  logback:
+#    rollingpolicy:
+#      max-file-size: 10MB               # максимальный размер одного файла
+#      max-history: 5                    # сколько файлов хранить

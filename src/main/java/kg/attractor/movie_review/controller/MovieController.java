@@ -1,7 +1,7 @@
 package kg.attractor.movie_review.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import kg.attractor.movie_review.dto.MovieDto;
+import kg.attractor.movie_review.service.MovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,31 +17,23 @@ import java.util.List;
 @RequestMapping("movies")
 @RequiredArgsConstructor
 public class MovieController {
+    private final MovieService movieService;
 
     @GetMapping
     public List<MovieDto> getMovies() {
-        return List.of(MovieDto.builder()
-                .title("Harry Potter")
-                .director("Some director")
-                .releaseYear(2000)
-                .build());
+        return movieService.findAll();
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<MovieDto> getMovie(@PathVariable Integer id) {
+    public ResponseEntity<MovieDto> getMovie(@PathVariable Long id) {
         return new ResponseEntity<>(
-                MovieDto.builder()
-                        .title("Harry Potter")
-                        .director("Some director")
-                        .releaseYear(2000)
-                        .build(),
+                movieService.findById(id),
                 HttpStatus.OK);
     }
 
     @PostMapping
-    public HttpStatus createMovie(MovieDto dto, HttpServletRequest request) {
-        System.out.println(dto.toString());
-        System.out.println(request.getRequestURI());
+    public HttpStatus createMovie(MovieDto dto) {
+        movieService.save(dto);
         return HttpStatus.OK;
     }
 }
