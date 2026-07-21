@@ -25,40 +25,42 @@ public class CustomerDao {
     private final KeyHolder keyHolder = new GeneratedKeyHolder();
 
     public List<Customer> findAll() {
-        String sql = "select * from customer;";
+        String sql = "select * from customers;";
         return jdbcTemplate.query(sql, new CustomerMapper());
     }
 
-    public Optional<Customer> findById(Integer id) {
-        String sql = "select * from customer " +
-                "where id = ?";
+    public Optional<Customer> findById(String email) {
+        String sql = "select * from customers " +
+                "where email = ?";
         return Optional.ofNullable(
                 DataAccessUtils.singleResult(
-                        jdbcTemplate.query(sql, new CustomerMapper(), id)
+                        jdbcTemplate.query(sql, new CustomerMapper(), email)
                 )
         );
     }
 
     public void save(Customer customer) {
-        String sql = "insert into customer (name, password) " +
-                "values(:name, :password)";
+        String sql = "insert into customers (email, username, password) " +
+                "values(:email, :name, :password)";
 
         namedParameterJdbcTemplate.update(
                 sql,
                 new MapSqlParameterSource()
+                        .addValue("email", customer.getEmail())
                         .addValue("name", customer.getUsername())
                         .addValue("password", customer.getPassword())
         );
     }
 
     public Integer saveAndReturnId(Customer customer) {
-        String sql = "insert into customer (name, password) " +
-                "values(?, ?)";
+        String sql = "insert into customers (email, name, password) " +
+                "values(?, ?, ?)";
 
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, customer.getUsername());
-            ps.setString(2, customer.getPassword());
+            ps.setString(1, customer.getEmail());
+            ps.setString(2, customer.getUsername());
+            ps.setString(3, customer.getPassword());
             return ps;
         }, keyHolder);
 
