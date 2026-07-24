@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 010
+      author: Aleksei Podstavin
+      changes:
+        - addColumn:
+            tableName: customers
+            columns:
+              - column:
+                  name: enabled
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: long
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_customer_role_id
+                    references: roles(id)

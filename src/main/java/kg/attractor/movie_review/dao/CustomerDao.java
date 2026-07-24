@@ -40,8 +40,8 @@ public class CustomerDao {
     }
 
     public void save(Customer customer) {
-        String sql = "insert into customers (email, username, password) " +
-                "values(:email, :name, :password)";
+        String sql = "insert into customers (email, username, password, enabled, role_id) " +
+                "values(:email, :name, :password, :enabled, :role_id)";
 
         namedParameterJdbcTemplate.update(
                 sql,
@@ -49,11 +49,13 @@ public class CustomerDao {
                         .addValue("email", customer.getEmail())
                         .addValue("name", customer.getUsername())
                         .addValue("password", customer.getPassword())
+                        .addValue("enabled", customer.getEnabled())
+                        .addValue("role_id", 3)
         );
     }
 
     public Integer saveAndReturnId(Customer customer) {
-        String sql = "insert into customers (email, name, password) " +
+        String sql = "insert into customers (email, username, password) " +
                 "values(?, ?, ?)";
 
         jdbcTemplate.update(con -> {
